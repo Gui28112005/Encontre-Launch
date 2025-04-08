@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visualizar Cliques</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f7f7f7;
+    }
+
+    .container {
+      width: 80%;
+      margin: 20px auto;
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    .message {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 18px;
+      color: #333;
+    }
+
+    .error {
+      color: red;
+    }
+
+    .success {
+      color: green;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Cliques Registrados</h1>
+    <table id="cliquesTable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Comércio</th>
+          <th>Link</th>
+          <th>Data</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Os cliques serão inseridos aqui -->
+      </tbody>
+    </table>
+
+    <div class="message" id="message"></div>
+  </div>
+
+  <script>
+    // Função para carregar os cliques registrados
+    async function carregarCliques() {
+      const tableBody = document.querySelector('#cliquesTable tbody');
+      const messageDiv = document.getElementById("message");
+
+      try {
+        // Chama o endpoint para obter os cliques
+        const response = await fetch("http://localhost:8080/api/cliques");
+
+
+        // Verifica se a resposta foi bem-sucedida
+        if (!response.ok) {
+          throw new Error('Erro ao carregar os cliques');
+        }
+
+        const cliques = await response.json();
+
+        if (cliques.length === 0) {
+          messageDiv.innerHTML = "Nenhum clique registrado.";
+          messageDiv.classList.remove('error');
+          messageDiv.classList.add('success');
+        } else {
+          messageDiv.innerHTML = "";
+          // Preenche a tabela com os cliques
+          tableBody.innerHTML = '';
+          cliques.forEach(clique => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td>${clique.id}</td>
+              <td>${clique.comercio_nome}</td>
+              <td><a href="${clique.link}" target="_blank">${clique.link}</a></td>
+              <td>${new Date(clique.created_at).toLocaleString()}</td>
+            `;
+            tableBody.appendChild(row);
+          });
+        }
+      } catch (error) {
+        messageDiv.innerHTML = `Erro: ${error.message}`;
+        messageDiv.classList.remove('success');
+        messageDiv.classList.add('error');
+      }
+    }
+
+    // Carregar os cliques assim que a página for carregada
+    window.onload = carregarCliques;
+  </script>
+
+</body>
+</html>

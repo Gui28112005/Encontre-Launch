@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Detalhes do Comércio</title>
+  <link rel="stylesheet" href="estilos.css" />
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 16px;
+    }
+    .comercio-container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .comercio-imagem {
+      width: 100%;
+      border-radius: 12px;
+      margin-bottom: 12px;
+    }
+    .comercio-links a {
+      margin-right: 8px;
+      text-decoration: none;
+      padding: 6px 10px;
+      background-color: #007bff;
+      color: white;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="comercio-container" id="comercioContainer">
+    <p>Carregando...</p>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const comercioId = urlParams.get("id");
+
+      const container = document.getElementById("comercioContainer");
+
+      if (!comercioId) {
+        container.innerHTML = "<p>ID do comércio não encontrado na URL.</p>";
+        return;
+      }
+
+      try {
+        const response = await fetch(`http://localhost:8080/comercios/${comercioId}`);
+        if (!response.ok) throw new Error("Comércio não encontrado");
+        const comercio = await response.json();
+
+        let imagens = [];
+        if (comercio.imagem_capa) imagens.push(comercio.imagem_capa);
+        if (comercio.imagem_capa_2) imagens.push(comercio.imagem_capa_2);
+        if (comercio.imagem_capa_3) imagens.push(comercio.imagem_capa_3);
+
+        let imagensHtml = imagens
+          .map(img => `<img src="${img}" class="comercio-imagem" />`)
+          .join("");
+
+        let linksHtml = `
+          <div class="comercio-links">
+            ${comercio.link_facebook ? `<a href="${comercio.link_facebook}" target="_blank">Facebook</a>` : ""}
+            ${comercio.link_instagram ? `<a href="${comercio.link_instagram}" target="_blank">Instagram</a>` : ""}
+            ${comercio.link_site_pessoal ? `<a href="${comercio.link_site_pessoal}" target="_blank">Site</a>` : ""}
+            ${comercio.endereco ? `<a href="${comercio.endereco}" target="_blank">Maps</a>` : ""}
+          </div>
+        `;
+
+        container.innerHTML = `
+          <h2>${comercio.nome}</h2>
+          ${imagensHtml}
+          <p><strong>Categoria:</strong> ${comercio.categoria}</p>
+          <p><strong>Endereço:</strong> ${comercio.endereco}</p>
+          <p><strong>Horário:</strong> ${comercio.horario_funcionamento || "Não informado"}</p>
+          <p><strong>Descrição:</strong> ${comercio.descricao || "Sem descrição"}</p>
+          <p><strong>Contato:</strong> ${comercio.contato || "Não disponível"}</p>
+          ${linksHtml}
+        `;
+      } catch (error) {
+        container.innerHTML = `<p>Erro ao carregar comércio: ${error.message}</p>`;
+      }
+    });
+  </script>
+</body>
+</html>
