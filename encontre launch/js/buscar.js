@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
     `;
 
   // Busca e exibe os detalhes dos comércios
-  fetch("http://localhost:8080/all-businesses-details")
+  fetch("https://encontreoficialback.azurewebsites.net/all-businesses-details")
     .then((response) => response.json())
     .then((data) => {
       // Remove skeleton loader
@@ -138,7 +138,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
   // Busca e exibe o ranking dos avaliadores (pessoas que mais fizeram avaliações)
-  fetch("http://localhost:8080/all-users-details")
+  fetch("https://encontreoficialback.azurewebsites.net/all-users-details")
     .then((response) => response.json())
     .then((users) => {
       // Ordena os usuários: os que mais fizeram avaliações primeiro
