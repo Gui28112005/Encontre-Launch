@@ -4,7 +4,7 @@ function searchBusiness() {
   const businessList = document.getElementById("business-list");
   const evaluationContainer = document.getElementById("evaluation-container");
 
-  let url = "http://localhost:8080/search-business?";
+  let url = "https://encontreoficialback.azurewebsites.net/search-business?";
   if (searchTerm) {
     url += `nome=${encodeURIComponent(searchTerm)}`;
   }
