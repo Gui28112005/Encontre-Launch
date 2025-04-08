@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     try {
       if (loading) loading.style.display = "flex";
 
-      let url = "http://localhost:8080/comercios";
+      let url = "https://encontreoficialback.azurewebsites.net/comercios";
       if (categoria !== "todos") {
         url += `?categoria=${encodeURIComponent(categoria)}`;
       }
