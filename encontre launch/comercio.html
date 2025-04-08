@@ -39,7 +39,7 @@ main {
 
 .comercio-container {
     background: #ffffff;
-    max-width: 668px;
+    max-width: 755px;
     width: 85%;
     margin: 50px auto;  /* Top e bottom com 50px e left/right automáticos */
     padding: 20px;
@@ -122,14 +122,17 @@ main {
         .comercio-links {
             margin-top: 30px;
             text-align: center;
+            display: grid;
+
         }
 
         .comercio-links a {
             display: inline-block;
+            align-items: none;
             margin: 8px 12px;
             text-decoration: none;
             padding: 12px 22px;
-            background-color: #007bff;
+            background-color: #0066ae;
             color: white;
             border-radius: 50px;
             font-size: 1rem;
@@ -163,7 +166,7 @@ main {
         }
 
         .qr-section {
-            margin-top: 50px;
+            margin-top: 10px;
             padding-top: 30px;
             border-top: 1px solid #696969;
             text-align: center;
@@ -179,21 +182,22 @@ main {
         #qrcode {
     margin: 0 auto;
     padding: 12px;
-    background: #ffffff;
+    background: #000000;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100%;
-    max-width: 160px;
+    width: 60%;
+    margin-top: 5;
+    max-width: 100px;
     aspect-ratio: 1;
 }
 
 
         @media (max-width: 600px) {
             h2 {
-                font-size: 2rem;
+                font-size: 1.4rem;
             }
 
             .comercio-container {
@@ -383,7 +387,6 @@ nav a:hover {
         <div class="comercio-container" id="comercioContainer">
             <p class="loading-message">Carregando detalhes do comércio...</p>
             <!-- Botão de impressão -->
-            <button id="btnPrint" onclick="window.print()">Imprimir Card</button>
         </div>
         
   <!-- Footer -->
@@ -431,7 +434,7 @@ nav a:hover {
             }
 
             try {
-                const response = await fetch(`https://encontreoficialback.azurewebsites.net/comercios/${comercioId}`);
+                const response = await fetch(`http://localhost:8080/comercios/${comercioId}`);
                 if (!response.ok) {
                     console.error("Erro ao buscar comércio:", response.status);
                     container.innerHTML = "<p class='error-message'>Erro ao carregar os detalhes do comércio.</p>";
@@ -475,12 +478,11 @@ nav a:hover {
                     <h2>${comercio.nome}</h2>
                     ${imagensHtml}
                     <div class="comercio-info">
-                        <p><strong>🌎 Categoria:</strong> ${comercio.categoria}</p>
-                        <p><strong>🏬 Endereço:</strong> ${comercio.endereco}</p>
-                        <p><strong>⏰ Horário:</strong> ${comercio.horario_funcionamento || "Não informado"}</p>
-                        <p><strong>📖 Descrição:</strong> ${comercio.descricao || "Sem descrição"}</p>
-                        <p><strong>☎️ Contato:</strong> ${comercio.contato || "Não disponível"}</p>
-                        <p><strong>💵 Pagamentos aceitos:</strong> ${comercio.contato || "Não disponível"}</p>
+                        <p><strong>Categoria:</strong> ${comercio.categoria}</p>
+                        <p><strong>Endereço:</strong> ${comercio.endereco}</p>
+                        <p><strong>Horário:</strong> ${comercio.horario_funcionamento || "Não informado"}</p>
+                        <p><strong>Descrição:</strong> ${comercio.descricao || "Sem descrição"}</p>
+                        <p><strong>Contato:</strong> ${comercio.contato || "Não disponível"}</p>
                     </div>
                     ${linksHtml}
                     <div class="qr-section">
